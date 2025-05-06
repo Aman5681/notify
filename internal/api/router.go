@@ -8,13 +8,16 @@ import (
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
+	r.POST("/login", auth.LoginHandler)
+	r.POST("/register", auth.RegisterHandler)
+	r.POST("/refresh-auth-token", auth.RefreshHandler)
+	// protected routes
+
 	api := r.Group("/api")
 	{
-		api.POST("/login", LoginHandler)
-		api.POST("/register", RegisterHandler)
 		api.Use(auth.JWTMiddleware())
 		{
-			api.POST("/notify", NotifyHandler)
+			api.POST("/notify", auth.NotifyHandler)
 		}
 	}
 
